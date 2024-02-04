@@ -1,27 +1,21 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
-import { Alert, Container } from "@mui/material";
-import { VerifySessionTokenOrRedirect } from "general/VerificationUtil";
-import { SupervisedUserCircleOutlined } from "@mui/icons-material";
-
-const RequestState = {
-    None: 0,
-    InProgess: 1,
-    Success: 2,
-    Failure: 3,
-};
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+import { Alert, Container } from '@mui/material';
+import { VerifySessionTokenOrRedirect } from 'general/VerificationUtil';
+import { SupervisedUserCircleOutlined } from '@mui/icons-material';
+import { RequestStateEnum } from '../../lib/enums/RequestStateEnum';
 
 function ChangeUsername() {
-    const [reqState, setReqState] = React.useState(RequestState.None);
-    const [errMsg, setErrMsg] = React.useState("");
+    const [reqState, setReqState] = React.useState(RequestStateEnum.None);
+    const [errMsg, setErrMsg] = React.useState('');
     const [isVerified, setIsVerified] = React.useState(false);
     const navigate = useNavigate();
 
@@ -33,30 +27,30 @@ function ChangeUsername() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        await fetch("http://localhost:3000/user-authentication/change-password", {
-            method: "PATCH",
+        await fetch('http://localhost:3000/user-authentication/change-password', {
+            method: 'PATCH',
             body: JSON.stringify({
-                username: data.get("username"),
-                sessionToken: sessionStorage.getItem("sessionToken"),
-                new_password: data.get("new_password"),
+                username: data.get('username'),
+                sessionToken: sessionStorage.getItem('sessionToken'),
+                new_password: data.get('new_password'),
             }),
             headers: {
-                "Content-type": "application/json; charset=UTF-8",
+                'Content-type': 'application/json; charset=UTF-8',
             },
         })
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
                 if (data.code === 200) {
-                    navigate("/chat");
-                    setReqState(RequestState.Success);
+                    navigate('/chat');
+                    setReqState(RequestStateEnum.Success);
                 } else {
                     setErrMsg(data.message);
-                    setReqState(RequestState.Failure);
+                    setReqState(RequestStateEnum.Failure);
                 }
             })
             .catch((err) => {
-                setReqState(RequestState.Failure);
+                setReqState(RequestStateEnum.Failure);
                 console.log(err.message);
             });
     };
@@ -66,12 +60,12 @@ function ChangeUsername() {
             maxWidth="sm"
             sx={{
                 marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
             }}
         >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <SupervisedUserCircleOutlined />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -97,7 +91,7 @@ function ChangeUsername() {
                 <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                     Change Password
                 </Button>
-                {reqState === RequestState.Failure ? (
+                {reqState === RequestStateEnum.Failure ? (
                     <Alert severity="error" sx={{ mt: 3, mb: 2 }}>
                         {errMsg}
                     </Alert>
