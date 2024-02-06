@@ -12,7 +12,6 @@ import JoinGroups from './joinGroups/JoinGroups';
 import MyGroups from './myGroups/MyGroups';
 import Profile from './profile/Profile';
 import { Router, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import ProtectedRoute from './protectedRoute/ProtectedRoute';
 
 export const router = createBrowserRouter([
     {

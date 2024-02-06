@@ -4,8 +4,11 @@
     background-color: var(--mui-theme-color-primary-main);
     gap: var(--mui-theme-size-md);
     padding: var(--mui-theme-size-md) var(--mui-theme-size-md);
-    width: 16rem;
-    height: 100vh;
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    top: 0;
+    left: 0;
 
     &--closed {
         width: 88px;
@@ -43,14 +46,16 @@
     font-size: 20px;
     font-weight: 500;
     border-radius: 8px;
+    border-left: 3px solid transparent;
 
     :hover {
-        background-color: var(--mui-theme-color-contrast-main);
         font-weight: 600;
     }
 
     &--active {
-        background-color: var(--mui-theme-color-contrast-main);
+        border-left: 3px solid white;
+        border-radius: 0%;
+        background-color: transparent;
     }
 
     &__container {

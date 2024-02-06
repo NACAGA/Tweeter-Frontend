@@ -3,4 +3,19 @@
     height: 100vh;
     background-color: var(--mui-theme-surface-main);
     color: var(--mui-theme-text-main);
+
+    &__content {
+        margin-left: 288px;
+    }
+}
+
+.anonymous-layout {
+    display: flex;
+    justify-content: center;
+    background-color: var(--mui-theme-surface-main);
+    color: var(--mui-theme-text-main);
+
+    &__content {
+        margin-left: 288px;
+    }
 }

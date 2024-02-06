@@ -1,7 +1,11 @@
 import { Router, BrowserRouter, Outlet } from 'react-router-dom';
 
 function AnonymousLayout({ children }: any) {
-    return <div className="main-layout">{children}</div>;
+    return (
+        <div className="anonymous-layout">
+            <Outlet />
+        </div>
+    );
 }
 
 export default AnonymousLayout;

@@ -11,8 +11,6 @@ interface Props {
 }
 
 function SidebarLink(props: Props): ReactElement {
-    const active = '/' + window.location.href.split('/').pop() === props.href;
-
     return (
         <NavLink
             type="button"
