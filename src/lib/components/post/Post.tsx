@@ -1,68 +1,29 @@
 import React from 'react';
 import { Box, Card, IconButton, Stack, Typography } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import LikeButton from './LikeButton';
-import CommentButton from './CommentButton';
+import LikeButton from '../like-button/LikeButton';
+import CommentButton from '../comment/comment-button/CommentButton';
+import { TPost } from '../../types/TPost';
+import PostUtils from '../../utils/post-utils';
 
 interface Props {
     postid: number;
 }
 
-type PostObject = {
-    username: string;
-    date: Date;
-    content: string;
-    memberOf: boolean;
-    groupName: string;
-    likes: number;
-    comments: number;
-    userLiked: boolean;
-};
-
-const createPost = (
-    username: string,
-    date: Date,
-    content: string,
-    memberOf: boolean,
-    groupName: string,
-    likes: number,
-    comments: number,
-    userLiked: boolean
-) => ({
-    username: username,
-    date: date,
-    content: content,
-    memberOf: memberOf,
-    groupName: groupName,
-    likes: likes,
-    comments: comments,
-    userLiked: userLiked,
-});
-
 function Post(props: Props) {
-    const [post, setPost] = React.useState<PostObject | undefined>(undefined);
+    const [post, setPost] = React.useState<TPost | undefined>(undefined);
     const [height, setHeight] = React.useState<number>(2);
 
     React.useEffect(() => {
         // fetch post from server
         const content =
-            'Unicorns, with their ethereal grace, tread lightly, leaving a faint shimmer in their wake. They remind us that beauty is transient, and must be approached with the utmost gentleness and respect. #UnicornWhispers #MagicInDelicacy 🦄✨';
-        setPost(createPost('Stephen Speilberg', new Date(), content, false, 'Unicorn Enthusiests', 0, 0, false));
+            'Unicorns, with their grace, tread lightly, leaving a faint shimmer in their wake. They remind us that beauty is transient, and must be approached with the utmost gentleness and respect. #UnicornWhispers #MagicInDelicacy 🦄✨';
+        setPost(PostUtils.createPost('Stephen Speilberg', new Date(), content, false, 'Unicorn Enthusiests'));
     }, [props.postid]);
 
     const onJoinButtonPressed = () => {
         if (post === undefined) return;
         setPost({ ...post, memberOf: true });
-    };
-
-    const onLikeButtonPressed = () => {
-        if (post === undefined) return;
-        setPost({ ...post, userLiked: !post.userLiked });
-    };
-
-    const onCommentButtonPressed = () => {
-        if (post === undefined) return;
-        setPost({ ...post, comments: post.comments + 1 });
     };
 
     const onPostClicked = () => {
@@ -117,8 +78,8 @@ function Post(props: Props) {
                     </Typography>
                 </Box>
                 <Box display="flex" padding={'8px 16px'} justifyContent={'space-between'} alignContent={'center'}>
-                    <CommentButton onClick={onCommentButtonPressed} comments={post.comments}></CommentButton>
-                    <LikeButton onClick={onLikeButtonPressed} liked={post.userLiked} likes={post.likes}></LikeButton>
+                    <CommentButton postid={1} postInfo={post}></CommentButton>
+                    <LikeButton mediaType="post" mediaid={props.postid}></LikeButton>
                 </Box>
             </Box>
         </Card>

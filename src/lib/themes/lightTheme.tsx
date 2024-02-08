@@ -15,6 +15,11 @@ declare module '@mui/material/Button' {
         gray: true;
     }
 }
+declare module '@mui/material/Card' {
+    interface CardPropsColorOverrides {
+        gray: true;
+    }
+}
 
 export const lightTheme: Theme = createTheme({
     palette: {
