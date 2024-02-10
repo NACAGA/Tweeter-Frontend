@@ -1,24 +1,77 @@
 import React from 'react';
-import { Box, Card, IconButton, Stack, Typography } from '@mui/material';
+import { Alert, Box, Card, IconButton, Stack, Typography } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LikeButton from '../like-button/LikeButton';
 import CommentButton from '../comment/comment-button/CommentButton';
 import { TPost } from '../../types/TPost';
 import PostUtils from '../../utils/post-utils';
+import { RequestStateEnum } from 'lib/types/enums/RequestStateEnum';
+import { set } from 'lodash';
 
 interface Props {
     postid: number;
+    userid: number;
+}
+
+const postEndpointUrl = 'http://localhost:3002/message-board/post/';
+const groupEndpointUrl = 'http://localhost:3002/message-board/group/';
+const userEndpointUrl = 'http://localhost:3002/message-board/user/';
+
+async function getGroupName(groupid: number): Promise<string> {
+    const requestResult = await fetch(`${groupEndpointUrl}${groupid}`, { method: 'GET' });
+    if (!requestResult.ok) {
+        throw new Error(`HTTP error! status: ${requestResult.status}`);
+    }
+    const data = await requestResult.json();
+    return data.response.group.name;
+}
+
+async function getUserInGroup(groupid: number, userid: number): Promise<boolean> {
+    const requestResult = await fetch(`${userEndpointUrl}${groupid}`, { method: 'GET' });
+    if (!requestResult.ok) {
+        throw new Error(`HTTP error! status: ${requestResult.status}`);
+    }
+    const data = await requestResult.json();
+    const users = data.response.users;
+    return users.some((user: any) => user.id === userid);
 }
 
 function Post(props: Props) {
+    const [reqState, setReqState] = React.useState(RequestStateEnum.None);
+    const [errMsg, setErrMsg] = React.useState('');
     const [post, setPost] = React.useState<TPost | undefined>(undefined);
     const [height, setHeight] = React.useState<number>(2);
 
     React.useEffect(() => {
-        // fetch post from server
-        const content =
-            'Unicorns, with their grace, tread lightly, leaving a faint shimmer in their wake. They remind us that beauty is transient, and must be approached with the utmost gentleness and respect. #UnicornWhispers #MagicInDelicacy 🦄✨';
-        setPost(PostUtils.createPost('Stephen Speilberg', new Date(), content, false, 'Unicorn Enthusiests'));
+        setReqState(RequestStateEnum.InProgess);
+        fetch(`${postEndpointUrl}${props.postid}`, { method: 'GET' })
+            .then((response) => {
+                if (response.status === 500) {
+                    throw new Error('Internal Server Error: Cannot retrieve post data from server.');
+                }
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                return response.json();
+            })
+            .then(async (data) => {
+                if (data) {
+                    const result = data.response.result[0];
+                    return Promise.all([getGroupName(result.group_id), getUserInGroup(result.group_id, props.userid)]).then(
+                        ([groupName, userInGroup]) => {
+                            setReqState(RequestStateEnum.Success);
+                            setPost(PostUtils.createPost('jimbo', result.created_at, result.content, userInGroup, groupName));
+                        }
+                    );
+                }
+            })
+            .catch((err) => {
+                setReqState(RequestStateEnum.Failure);
+                setErrMsg(err.message);
+                console.error(err);
+            });
     }, [props.postid]);
 
     const onJoinButtonPressed = () => {
@@ -30,11 +83,23 @@ function Post(props: Props) {
         if (post === undefined) return;
     };
 
-    if (post === undefined) return null;
+    if (reqState === RequestStateEnum.None || reqState === RequestStateEnum.InProgess) {
+        return <Alert severity="info">Loading...</Alert>; // Show loading indicator
+    }
+
+    if (reqState === RequestStateEnum.Failure) {
+        return (
+            <Alert severity="error" sx={{ mt: 3, mb: 2 }}>
+                {errMsg}
+            </Alert>
+        );
+    }
+
+    if (!post) return null;
     return (
         <Card
             raised={true}
-            sx={{ width: 'fit-content', borderRadius: '24px', cursor: `${post.memberOf ? 'pointer' : 'default'}` }}
+            sx={{ width: '100%', borderRadius: '24px', cursor: `${post.memberOf ? 'pointer' : 'default'}`, minWidth: '400px' }}
             onClick={post.memberOf ? onPostClicked : undefined}
             onMouseEnter={() => {
                 post.memberOf ? setHeight(4) : setHeight(2);

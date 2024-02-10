@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { IconName, IconNameEnum } from 'lib/enums/IconNameEnum';
+import { IconName, IconNameEnum } from 'lib/types/enums/IconNameEnum';
 import './Sidebar.scss';
 import { Link, NavLink } from 'react-router-dom';
 

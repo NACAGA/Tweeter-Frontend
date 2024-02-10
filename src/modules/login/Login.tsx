@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
-import { RequestStateEnum } from 'lib/enums/RequestStateEnum';
+import { RequestStateEnum } from 'lib/types/enums/RequestStateEnum';
 
 function Signup() {
     const [reqState, setReqState] = React.useState(RequestStateEnum.None);

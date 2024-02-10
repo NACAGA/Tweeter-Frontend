@@ -2,7 +2,7 @@ import Sidebar from 'lib/components/sidebar/Sidebar';
 import './Layouts.scss';
 import { Outlet } from 'react-router-dom';
 
-function MainLayout({ children }: any) {
+function MainLayout() {
     return (
         <div className="main-layout">
             <Sidebar />

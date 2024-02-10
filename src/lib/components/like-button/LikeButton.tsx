@@ -2,7 +2,6 @@ import { Button } from '@mui/material';
 import React from 'react';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { set } from 'lodash';
 
 interface Props {
     mediaid: number;
@@ -16,26 +15,28 @@ function Like(props: Props) {
     const [liked, setLiked] = React.useState<boolean>(false);
 
     React.useEffect(() => {
-        fetch(`${testApiUrl}/like/${props.mediaType}/${props.mediaid}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setNumberOfLikes(data.response.likes.length);
-            });
+        // fetch(`${testApiUrl}/like/${props.mediaType}/${props.mediaid}`)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         setNumberOfLikes(data.response.likes.length);
+        //     });
+        setNumberOfLikes(0);
     }, [props.mediaid]);
 
     React.useEffect(() => {
-        fetch(`${testApiUrl}/like/${props.mediaType}/${props.mediaid}/user`)
-            .then((response) => response.json())
-            .then((data) => {
-                setLiked(data.response.liked);
-            })
-            .catch((err) => {});
+        // fetch(`${testApiUrl}/like/${props.mediaType}/${props.mediaid}/user`)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         setLiked(data.response.liked);
+        //     })
+        //     .catch((err) => {});
+        setLiked(false);
     }, []);
 
     const toggleLike = (): void => {
-        fetch(`${testApiUrl}/like/${props.mediaType}/${props.mediaid}`, {
-            method: liked ? 'DELETE' : 'POST',
-        }).catch((err) => {});
+        // fetch(`${testApiUrl}/like/${props.mediaType}/${props.mediaid}`, {
+        //     method: liked ? 'DELETE' : 'POST',
+        // }).catch((err) => {});
         setNumberOfLikes(liked ? numberOfLikes - 1 : numberOfLikes + 1);
         setLiked(!liked);
     };
