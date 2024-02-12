@@ -14,7 +14,14 @@ function CommentPost(props: Props) {
                 <Typography color="text.primary" variant="h5" fontWeight={'600'} alignItems={'center'} display={'flex'}>
                     {props.postInfo.username}
                 </Typography>
-                <Typography color="text.primary" variant="h5" fontWeight={'600'} alignItems={'center'} display={'flex'} marginLeft={'auto'}>
+                <Typography
+                    color="text.primary"
+                    variant="body1"
+                    fontWeight={'600'}
+                    alignItems={'center'}
+                    display={'flex'}
+                    marginLeft={'auto'}
+                >
                     {new Date(props.postInfo.date).toLocaleDateString()}
                 </Typography>
             </Stack>

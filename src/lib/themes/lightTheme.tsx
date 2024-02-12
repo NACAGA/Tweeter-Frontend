@@ -3,10 +3,12 @@ import { Palette, Theme, createTheme } from '@mui/material';
 declare module '@mui/material/styles' {
     interface Palettele {
         gray: Palette['primary'];
+        white: Palette['primary'];
     }
 
     interface PaletteOptions {
         gray: PaletteOptions['primary'];
+        white: PaletteOptions['primary'];
     }
 }
 
@@ -18,6 +20,13 @@ declare module '@mui/material/Button' {
 declare module '@mui/material/Card' {
     interface CardPropsColorOverrides {
         gray: true;
+    }
+}
+
+declare module '@mui/material/Fab' {
+    interface FabPropsColorOverrides {
+        gray: true;
+        white: true;
     }
 }
 
@@ -35,7 +44,7 @@ export const lightTheme: Theme = createTheme({
             contrastText: '#FFFFFF',
         },
         secondary: {
-            main: '#80FFE8',
+            main: '#5CF3D8',
             light: '#A6FFEF',
             dark: '#4DE5D2',
             contrastText: '#FFFFFF',
@@ -52,14 +61,20 @@ export const lightTheme: Theme = createTheme({
             dark: '#009a0a',
             contrastText: '#FFFFFF',
         },
-        action: {
-            hoverOpacity: 0.11,
-        },
         gray: {
             main: '#DCDCDC',
             light: '#ECECEC',
             dark: '#BCBCBC',
-            contrastText: '#000000',
+            contrastText: '#97D2FB',
+        },
+        white: {
+            main: '#FFFFFF',
+            light: '#B0E0FD',
+            dark: '#EDEDED',
+            contrastText: '#DCDCDC',
+        },
+        action: {
+            hoverOpacity: 0.11,
         },
     },
     typography: {

@@ -20,7 +20,7 @@ function Signup() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        setReqState(RequestStateEnum.InProgess);
+        setReqState(RequestStateEnum.InProgress);
 
         const data = new FormData(event.currentTarget);
         await fetch('http://localhost:3000/user-authentication/create-user', {
@@ -49,7 +49,7 @@ function Signup() {
             });
     };
 
-    let reqInProgress = reqState === RequestStateEnum.InProgess;
+    let reqInProgress = reqState === RequestStateEnum.InProgress;
 
     return (
         <Box

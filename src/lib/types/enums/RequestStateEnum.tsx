@@ -1,6 +1,6 @@
 export enum RequestStateEnum {
     'None' = 0,
-    'InProgess' = 1,
+    'InProgress' = 1,
     'Success' = 2,
     'Failure' = 3,
 }

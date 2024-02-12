@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Fab, Typography } from '@mui/material';
 import React from 'react';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -42,15 +42,12 @@ function Like(props: Props) {
     };
 
     return (
-        <Button
-            startIcon={liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            color={liked ? 'primary' : 'gray'}
-            onClick={toggleLike}
-            variant="outlined"
-            sx={{ border: '2px solid' }}
-        >
-            {numberOfLikes}
-        </Button>
+        <Fab size="small" variant="extended" color={liked ? 'primary' : 'white'} onClick={toggleLike}>
+            {liked ? <FavoriteIcon sx={{ mr: 1 }} /> : <FavoriteBorderIcon sx={{ mr: 1 }} />}
+            <Typography variant="body1" fontWeight={'600'}>
+                {numberOfLikes}
+            </Typography>
+        </Fab>
     );
 }
 

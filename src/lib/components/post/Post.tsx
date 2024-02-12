@@ -1,13 +1,11 @@
 import React from 'react';
-import { Alert, Box, Card, IconButton, Stack, Typography } from '@mui/material';
+import { Alert, Box, Card, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LikeButton from '../like-button/LikeButton';
 import CommentButton from '../comment/comment-button/CommentButton';
 import { TPost } from '../../types/TPost';
 import PostUtils from '../../utils/post-utils';
 import { RequestStateEnum } from 'lib/types/enums/RequestStateEnum';
-import { set } from 'lodash';
-
 interface Props {
     postid: number;
     userid: number;
@@ -43,7 +41,7 @@ function Post(props: Props) {
     const [height, setHeight] = React.useState<number>(2);
 
     React.useEffect(() => {
-        setReqState(RequestStateEnum.InProgess);
+        setReqState(RequestStateEnum.InProgress);
         fetch(`${postEndpointUrl}${props.postid}`, { method: 'GET' })
             .then((response) => {
                 if (response.status === 500) {
@@ -83,8 +81,12 @@ function Post(props: Props) {
         if (post === undefined) return;
     };
 
-    if (reqState === RequestStateEnum.None || reqState === RequestStateEnum.InProgess) {
-        return <Alert severity="info">Loading...</Alert>; // Show loading indicator
+    if (reqState === RequestStateEnum.None || reqState === RequestStateEnum.InProgress) {
+        return (
+            <Card>
+                <CircularProgress />
+            </Card>
+        );
     }
 
     if (reqState === RequestStateEnum.Failure) {
@@ -121,11 +123,11 @@ function Post(props: Props) {
                     )}
                     <Typography
                         color="text.primary"
-                        variant="h5"
-                        fontWeight={'600'}
+                        variant="body1"
                         display={'flex'}
                         alignItems={'center'}
                         marginLeft={'auto'}
+                        fontWeight={600}
                     >
                         {new Date(post.date).toLocaleDateString()}
                     </Typography>
@@ -143,7 +145,7 @@ function Post(props: Props) {
                     </Typography>
                 </Box>
                 <Box display="flex" padding={'8px 16px'} justifyContent={'space-between'} alignContent={'center'}>
-                    <CommentButton postid={1} postInfo={post}></CommentButton>
+                    <CommentButton postid={props.postid} postInfo={post} userid={props.userid}></CommentButton>
                     <LikeButton mediaType="post" mediaid={props.postid}></LikeButton>
                 </Box>
             </Box>
