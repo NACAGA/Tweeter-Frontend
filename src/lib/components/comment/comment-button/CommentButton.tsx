@@ -4,7 +4,6 @@ import ChatBubbleOutlinedIcon from '@mui/icons-material/ChatBubbleOutlined';
 import CommentFlyout from '../comment-flyout/CommentFlyout';
 import { TPost } from 'lib/types/TPost';
 import { RequestStateEnum } from 'lib/types/enums/RequestStateEnum';
-import { set } from 'lodash';
 
 interface Props {
     postid: number;
@@ -12,18 +11,23 @@ interface Props {
     userid: number;
 }
 
-const commentEndpointUrl = 'http://localhost:3002/message-board/comment/';
-
 function CommentButton(props: Props) {
     const [flyoutOpen, setFlyoutOpen] = React.useState<boolean>(false);
     const [reqState, setReqState] = React.useState(RequestStateEnum.None);
     const [errMsg, setErrMsg] = React.useState('');
     const [commentCount, setCommentCount] = React.useState<number | undefined>(undefined);
 
+    const baseUrl = 'http://localhost:3002/message-board/comment';
+    const commentCountQueryParams: { [key: string]: boolean } = {
+        count: true,
+    };
+    const commentCountUrl = new URL(`${baseUrl}/post/${props.postid}`);
+    Object.keys(commentCountQueryParams).forEach((key) => commentCountUrl.searchParams.append(key, commentCountQueryParams[key] as any));
+
     const toggleDrawer = () => setFlyoutOpen(!flyoutOpen);
 
     React.useEffect(() => {
-        fetch(`${commentEndpointUrl}post/${props.postid}`, { method: 'GET' })
+        fetch(`${commentCountUrl}`, { method: 'GET' })
             .then((response) => {
                 if (response.status === 500) {
                     throw new Error('Internal Server Error: Cannot retrieve comment data from server.');
@@ -38,7 +42,7 @@ function CommentButton(props: Props) {
             .then(async (data) => {
                 if (data) {
                     setReqState(RequestStateEnum.Success);
-                    const commentCount: number = data.response.comments.length;
+                    const commentCount: number = data.response.count;
                     setCommentCount(commentCount);
                 }
             })

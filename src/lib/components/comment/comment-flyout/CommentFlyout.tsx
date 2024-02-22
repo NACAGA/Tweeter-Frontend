@@ -83,7 +83,7 @@ function CommentFlyout(props: Props) {
                             <HighlightOffOutlinedIcon />
                         </IconButton>
                     </Box>
-                    <CommentPost postInfo={props.postInfo} postid={0}></CommentPost>
+                    <CommentPost postInfo={props.postInfo} postid={props.postid} userid={props.userid}></CommentPost>
                 </Stack>
                 <List
                     sx={{
@@ -103,7 +103,7 @@ function CommentFlyout(props: Props) {
                         commentIds.map((commentId: number) => {
                             return (
                                 <ListItem>
-                                    <Comment commentid={commentId}></Comment>
+                                    <Comment commentid={commentId} userid={props.userid}></Comment>
                                 </ListItem>
                             );
                         })

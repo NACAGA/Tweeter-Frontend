@@ -6,6 +6,7 @@ import CommentButton from '../comment/comment-button/CommentButton';
 import { TPost } from '../../types/TPost';
 import PostUtils from '../../utils/post-utils';
 import { RequestStateEnum } from 'lib/types/enums/RequestStateEnum';
+import { useNavigate } from 'react-router-dom';
 interface Props {
     postid: number;
     userid: number;
@@ -39,6 +40,7 @@ function Post(props: Props) {
     const [errMsg, setErrMsg] = React.useState('');
     const [post, setPost] = React.useState<TPost | undefined>(undefined);
     const [height, setHeight] = React.useState<number>(2);
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         setReqState(RequestStateEnum.InProgress);
@@ -79,6 +81,7 @@ function Post(props: Props) {
 
     const onPostClicked = () => {
         if (post === undefined) return;
+        navigate(`/group/${post?.groupName}`);
     };
 
     if (reqState === RequestStateEnum.None || reqState === RequestStateEnum.InProgress) {
@@ -146,7 +149,7 @@ function Post(props: Props) {
                 </Box>
                 <Box display="flex" padding={'8px 16px'} justifyContent={'space-between'} alignContent={'center'}>
                     <CommentButton postid={props.postid} postInfo={post} userid={props.userid}></CommentButton>
-                    <LikeButton mediaType="post" mediaid={props.postid}></LikeButton>
+                    <LikeButton mediaType="post" mediaid={props.postid} userid={props.userid}></LikeButton>
                 </Box>
             </Box>
         </Card>

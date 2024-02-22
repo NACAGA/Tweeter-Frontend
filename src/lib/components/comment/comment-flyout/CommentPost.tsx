@@ -5,6 +5,7 @@ import LikeButton from 'lib/components/like-button/LikeButton';
 interface Props {
     postInfo: TPost;
     postid: number;
+    userid: number;
 }
 
 function CommentPost(props: Props) {
@@ -30,9 +31,6 @@ function CommentPost(props: Props) {
                     {props.postInfo.content}
                 </Typography>
             </Box>
-            <Stack marginLeft={'auto'}>
-                <LikeButton mediaid={props.postid} mediaType={'post'}></LikeButton>
-            </Stack>
         </Stack>
     );
 }

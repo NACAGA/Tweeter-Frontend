@@ -9,9 +9,10 @@ import LikeButton from 'lib/components/like-button/LikeButton';
 
 interface Props {
     commentid: number;
+    userid: number;
 }
 
-const commentEndpointUrl = 'http://localhost:3002/message-board/comment/';
+const baseUrl = 'http://localhost:3002/message-board/comment';
 
 function Comment(props: Props) {
     const [reqState, setReqState] = React.useState(RequestStateEnum.None);
@@ -20,7 +21,7 @@ function Comment(props: Props) {
 
     React.useEffect(() => {
         setReqState(RequestStateEnum.InProgress);
-        fetch(`${commentEndpointUrl}${props.commentid}`, { method: 'GET' })
+        fetch(`${baseUrl}/${props.commentid}`, { method: 'GET' })
             .then((response) => {
                 if (response.status === 500) {
                     throw new Error('Internal Server Error: Cannot retrieve comment data from server.');
@@ -66,9 +67,6 @@ function Comment(props: Props) {
 
     return (
         <Stack gap={'16px'} flexDirection={'row'} alignItems={'center'} width={'100%'}>
-            <Stack height={'24px'} width={'24px'} color={'#BCBCBC'}>
-                <ArrowForwardIosIcon />
-            </Stack>
             <Box borderTop="1px dashed #BCBCBC" width="32px" height={'0px'} justifyContent={'flex-start'}></Box>
             <Card raised={true} sx={{ width: '100%', borderRadius: '16px', minWidth: '400px' }}>
                 <Stack padding={'8px'} gap={'8px'}>
@@ -84,7 +82,7 @@ function Comment(props: Props) {
                         <Typography variant="body1">{comment.content}</Typography>
                     </Box>
                     <Box display={'flex'} justifyContent={'flex-end'}>
-                        <LikeButton mediaid={props.commentid} mediaType={'comment'}></LikeButton>
+                        <LikeButton mediaid={props.commentid} mediaType={'comment'} userid={props.userid}></LikeButton>
                     </Box>
                 </Stack>
             </Card>

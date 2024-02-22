@@ -49,8 +49,13 @@ export default function AddCommentModal(props: Props) {
             },
         })
             .then((response) => {
+                console.log(response);
                 if (response.status === 500) {
                     throw new Error('Internal Server Error: Cannot add comment to post.');
+                }
+
+                if (response.status === 401) {
+                    throw new Error('Unauthorized: Please the join group to make comments on it');
                 }
 
                 if (!response.ok) {
@@ -60,7 +65,6 @@ export default function AddCommentModal(props: Props) {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 if (data) {
                     setReqState(RequestStateEnum.Success);
                     props.onClose(undefined as unknown as React.MouseEvent<HTMLButtonElement>);
