@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
     {
         element: <MainLayout />,
         children: [
-            { path: '/', element: <Home daysBack={5} /> },
+            { path: '/', element: <Home daysBack={20} /> },
             { path: 'change-username', element: <ChangeUsername /> },
             { path: 'change-password', element: <ChangePassword /> },
             { path: 'join-groups', element: <JoinGroups /> },

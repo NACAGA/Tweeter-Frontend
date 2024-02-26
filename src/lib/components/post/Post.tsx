@@ -7,6 +7,7 @@ import { TPost } from '../../types/TPost';
 import PostUtils from '../../utils/post-utils';
 import { RequestStateEnum } from 'lib/types/enums/RequestStateEnum';
 import { useNavigate } from 'react-router-dom';
+import { add } from 'lodash';
 interface Props {
     postid: number;
     userid: number;
@@ -36,14 +37,20 @@ async function getUserInGroup(groupid: number, userid: number): Promise<boolean>
 }
 
 function Post(props: Props) {
-    const [reqState, setReqState] = React.useState(RequestStateEnum.None);
-    const [errMsg, setErrMsg] = React.useState('');
+    const [getPostContentReqState, setGetPostContentReqState] = React.useState(RequestStateEnum.None);
+    const [getPostContentErrMsge, setGetPostContentErrMsg] = React.useState('');
+    const [addUserToGroupReqState, setAddUserToGroupReqState] = React.useState(RequestStateEnum.None);
+    const [addUserToGroupErrMsg, setAddUserToGroupErrMsg] = React.useState('');
+    const [groupid, setGroupId] = React.useState<number>(-1);
     const [post, setPost] = React.useState<TPost | undefined>(undefined);
     const [height, setHeight] = React.useState<number>(2);
     const navigate = useNavigate();
 
+    const baseUrl = 'http://localhost:3002/message-board';
+    const addUserToGroupUrl = new URL(`${baseUrl}/user/${props.userid}/${groupid}`);
+
     React.useEffect(() => {
-        setReqState(RequestStateEnum.InProgress);
+        setGetPostContentReqState(RequestStateEnum.InProgress);
         fetch(`${postEndpointUrl}${props.postid}`, { method: 'GET' })
             .then((response) => {
                 if (response.status === 500) {
@@ -59,32 +66,64 @@ function Post(props: Props) {
             .then(async (data) => {
                 if (data) {
                     const result = data.response.result[0];
-                    return Promise.all([getGroupName(result.group_id), getUserInGroup(result.group_id, props.userid)]).then(
+                    const groupid = result.group_id;
+                    return Promise.all([getGroupName(result.group_id), getUserInGroup(groupid, props.userid)]).then(
                         ([groupName, userInGroup]) => {
-                            setReqState(RequestStateEnum.Success);
+                            setGroupId(groupid);
+                            setGetPostContentReqState(RequestStateEnum.Success);
                             setPost(PostUtils.createPost('jimbo', result.created_at, result.content, userInGroup, groupName));
                         }
                     );
                 }
             })
             .catch((err) => {
-                setReqState(RequestStateEnum.Failure);
-                setErrMsg(err.message);
+                setGetPostContentReqState(RequestStateEnum.Failure);
+                setGetPostContentErrMsg(err.message);
                 console.error(err);
             });
     }, [props.postid]);
 
+    const addUserToGroup = (): void => {
+        setAddUserToGroupReqState(RequestStateEnum.InProgress);
+        if (groupid === -1) {
+            setAddUserToGroupReqState(RequestStateEnum.Failure);
+            setAddUserToGroupErrMsg('Unable to get the group id');
+            return;
+        }
+        fetch(`${addUserToGroupUrl}`, { method: 'POST' })
+            .then((response) => {
+                if (response.status === 500) {
+                    throw new Error('Internal Server Error: Cannot add user to group.');
+                }
+                if (response.status === 409) {
+                    throw new Error('User is already a member of this group.');
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            })
+            .then(async () => {
+                setAddUserToGroupReqState(RequestStateEnum.Success);
+            })
+            .catch((err) => {
+                setAddUserToGroupReqState(RequestStateEnum.Failure);
+                setAddUserToGroupErrMsg(err.message);
+                console.error(err);
+            });
+    };
+
     const onJoinButtonPressed = () => {
         if (post === undefined) return;
+        addUserToGroup();
         setPost({ ...post, memberOf: true });
     };
 
     const onPostClicked = () => {
         if (post === undefined) return;
-        navigate(`/group/${post?.groupName}`);
+        //navigate(`/group/${post?.groupName}`);
     };
 
-    if (reqState === RequestStateEnum.None || reqState === RequestStateEnum.InProgress) {
+    if (getPostContentReqState === RequestStateEnum.None || getPostContentReqState === RequestStateEnum.InProgress) {
         return (
             <Card>
                 <CircularProgress />
@@ -92,10 +131,10 @@ function Post(props: Props) {
         );
     }
 
-    if (reqState === RequestStateEnum.Failure) {
+    if (getPostContentReqState === RequestStateEnum.Failure) {
         return (
             <Alert severity="error" sx={{ mt: 3, mb: 2 }}>
-                {errMsg}
+                {getPostContentErrMsge}
             </Alert>
         );
     }
@@ -124,6 +163,11 @@ function Post(props: Props) {
                             <AddCircleIcon fontSize="medium" />
                         </IconButton>
                     )}
+                    {addUserToGroupReqState === RequestStateEnum.Failure ? (
+                        <Alert severity="error" sx={{ mt: 3, mb: 2 }}>
+                            {addUserToGroupErrMsg}
+                        </Alert>
+                    ) : null}
                     <Typography
                         color="text.primary"
                         variant="body1"
