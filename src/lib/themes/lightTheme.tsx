@@ -30,6 +30,13 @@ declare module '@mui/material/Fab' {
     }
 }
 
+declare module '@mui/material/Typography' {
+    interface TypographyPropsColorOverrides {
+        gray: true;
+        white: true;
+    }
+}
+
 export const lightTheme: Theme = createTheme({
     palette: {
         mode: 'light',

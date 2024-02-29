@@ -5,6 +5,7 @@ import React from 'react';
 import { RequestStateEnum } from 'lib/types/enums/RequestStateEnum';
 
 interface Props {
+    userid: number;
     daysBack: number;
 }
 
@@ -65,7 +66,7 @@ function Home(props: Props) {
                 </Typography>
             ) : (
                 postIds.map((postId: number) => {
-                    return <Post postid={postId} userid={1}></Post>;
+                    return <Post postid={postId} userid={props.userid}></Post>;
                 })
             )}
         </Stack>

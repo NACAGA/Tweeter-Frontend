@@ -13,14 +13,16 @@ import MyGroups from './myGroups/MyGroups';
 import Profile from './profile/Profile';
 import { Router, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+const userid = 3;
+
 export const router = createBrowserRouter([
     {
         element: <MainLayout />,
         children: [
-            { path: '/', element: <Home daysBack={20} /> },
+            { path: '/', element: <Home daysBack={20} userid={userid} /> },
             { path: 'change-username', element: <ChangeUsername /> },
             { path: 'change-password', element: <ChangePassword /> },
-            { path: 'join-groups', element: <JoinGroups /> },
+            { path: 'join-groups', element: <JoinGroups userid={userid} /> },
             { path: 'my-groups', element: <MyGroups /> },
             { path: 'profile', element: <Profile /> },
         ],
