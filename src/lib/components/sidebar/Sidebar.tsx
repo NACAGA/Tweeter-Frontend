@@ -13,10 +13,17 @@ import MailIcon from '@mui/icons-material/Mail';
 import SidebarLink from './SidebarLink';
 import SidebarHeader from './SidebarHeader';
 import './Sidebar.scss';
+import SidebarAction from './SidebarAction';
+import NewGroupModal from '../new-group/NewGroupModal';
 
 function Sidebar() {
     const [closed, setClosed] = useState(false);
+    const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
     const sidebarWidth = closed ? 88 : 256;
+
+    const toggleCreateGroupModal = () => {
+        setCreateGroupModalOpen((prev) => !prev);
+    };
 
     const handleClick = () => {
         setClosed((prev) => !prev);
@@ -28,9 +35,10 @@ function Sidebar() {
             <SidebarLink href="/" title="Home" icon="home" iconOnly={closed} />
             <SidebarLink href="/join-groups" title="Join Groups" icon="search" iconOnly={closed} />
             <SidebarLink href="/my-groups" title="My Groups" icon="group" iconOnly={closed} />
-            <SidebarLink href="/creategroup" title="Create Group" icon="addCircle" iconOnly={closed} />
-            <SidebarLink href="/newpost" title="New Post" icon="addPage" iconOnly={closed} />
+            <SidebarAction title="Create Group" icon="addCircle" iconOnly={closed} onClick={toggleCreateGroupModal} />
+            <SidebarAction title="New Post" icon="addPage" iconOnly={closed} />
             <SidebarLink href="/profile" title="Profile" icon="person" iconOnly={closed} />
+            <NewGroupModal userid={1} open={createGroupModalOpen} onClose={toggleCreateGroupModal} />
         </div>
     );
 }
