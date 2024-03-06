@@ -59,16 +59,21 @@ function Home(props: Props) {
     if (postIds === undefined) return null;
 
     return (
-        <Stack gap={'24px'} padding={'64px 64px'} sx={{ height: 'fit-content' }}>
-            {postIds.length <= 0 ? (
-                <Typography variant="body1" color="text.primary" textAlign={'center'}>
-                    No posts were found
-                </Typography>
-            ) : (
-                postIds.map((postId: number) => {
-                    return <Post postid={postId} userid={props.userid}></Post>;
-                })
-            )}
+        <Stack sx={{ height: 'fit-content' }} gap={'12px'} padding={'64px 64px'}>
+            <Typography variant="h2" fontWeight={600} color="text.primary" textAlign={'left'}>
+                Home
+            </Typography>
+            <Stack gap={'24px'} sx={{ height: 'fit-content' }}>
+                {postIds.length <= 0 ? (
+                    <Typography variant="body1" color="text.primary" textAlign={'center'}>
+                        No posts were found
+                    </Typography>
+                ) : (
+                    postIds.map((postId: number) => {
+                        return <Post postid={postId} userid={props.userid}></Post>;
+                    })
+                )}
+            </Stack>
         </Stack>
     );
 }

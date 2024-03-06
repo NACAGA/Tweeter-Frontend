@@ -65,21 +65,26 @@ function JoinGroups(props: Props) {
     if (groupIds === undefined) return null;
 
     return (
-        <Grid container spacing={2} padding={'64px 64px'} sx={{ height: 'fit-content' }}>
-            {groupIds.length <= 0 ? (
-                <Typography variant="body1" color="text.primary" textAlign={'center'}>
-                    No groups were found
-                </Typography>
-            ) : (
-                groupIds.map((groupid: number) => {
-                    return (
-                        <Grid item xs={6}>
-                            <Group groupid={groupid} userid={props.userid} memberOf={false}></Group>
-                        </Grid>
-                    );
-                })
-            )}
-        </Grid>
+        <Stack sx={{ height: 'fit-content' }} padding={'64px 64px'} gap={'12px'}>
+            <Typography variant="h2" fontWeight={600} color="text.primary" textAlign={'left'}>
+                Join Groups
+            </Typography>
+            <Grid container spacing={2} sx={{ height: 'fit-content' }}>
+                {groupIds.length <= 0 ? (
+                    <Alert severity="info" sx={{ ml: 10, mt: 10 }}>
+                        No groups were found
+                    </Alert>
+                ) : (
+                    groupIds.map((groupid: number) => {
+                        return (
+                            <Grid item xs={6}>
+                                <Group groupid={groupid} userid={props.userid} memberOf={false}></Group>
+                            </Grid>
+                        );
+                    })
+                )}
+            </Grid>
+        </Stack>
     );
 }
 

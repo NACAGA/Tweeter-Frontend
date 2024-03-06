@@ -36,7 +36,6 @@ function Sidebar() {
             <SidebarLink href="/join-groups" title="Join Groups" icon="search" iconOnly={closed} />
             <SidebarLink href="/my-groups" title="My Groups" icon="group" iconOnly={closed} />
             <SidebarAction title="Create Group" icon="addCircle" iconOnly={closed} onClick={toggleCreateGroupModal} />
-            <SidebarAction title="New Post" icon="addPage" iconOnly={closed} />
             <SidebarLink href="/profile" title="Profile" icon="person" iconOnly={closed} />
             <NewGroupModal userid={1} open={createGroupModalOpen} onClose={toggleCreateGroupModal} />
         </div>

@@ -12,8 +12,9 @@ import JoinGroups from './joinGroups/JoinGroups';
 import MyGroups from './myGroups/MyGroups';
 import Profile from './profile/Profile';
 import { Router, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import GroupPosts from './groupPosts/GroupPosts';
 
-const userid = 3;
+const userid = 1;
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
             { path: 'join-groups', element: <JoinGroups userid={userid} /> },
             { path: 'my-groups', element: <MyGroups /> },
             { path: 'profile', element: <Profile /> },
+            { path: 'group/:id', element: <GroupPosts userid={userid} /> },
         ],
     },
     {

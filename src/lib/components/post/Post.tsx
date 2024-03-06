@@ -65,15 +65,14 @@ function Post(props: Props) {
             })
             .then(async (data) => {
                 if (data) {
-                    const result = data.response.result[0];
-                    const groupid = result.group_id;
-                    return Promise.all([getGroupName(result.group_id), getUserInGroup(groupid, props.userid)]).then(
-                        ([groupName, userInGroup]) => {
-                            setGroupId(groupid);
-                            setGetPostContentReqState(RequestStateEnum.Success);
-                            setPost(PostUtils.createPost('jimbo', result.created_at, result.content, userInGroup, groupName));
-                        }
-                    );
+                    const post = data.response.posts[0];
+                    const date = new Date(post.postedOn);
+                    const groupid = post.group;
+                    return Promise.all([getGroupName(groupid), getUserInGroup(groupid, props.userid)]).then(([groupName, userInGroup]) => {
+                        setGroupId(groupid);
+                        setGetPostContentReqState(RequestStateEnum.Success);
+                        setPost(PostUtils.createPost(post.id, 'jimbo', date, post.content, userInGroup, groupName, post.group));
+                    });
                 }
             })
             .catch((err) => {
@@ -120,7 +119,7 @@ function Post(props: Props) {
 
     const onPostClicked = () => {
         if (post === undefined) return;
-        //navigate(`/group/${post?.groupName}`);
+        navigate(`/group/${post?.groupid}`);
     };
 
     if (getPostContentReqState === RequestStateEnum.None || getPostContentReqState === RequestStateEnum.InProgress) {

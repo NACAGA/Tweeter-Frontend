@@ -28,6 +28,7 @@ function Group(props: Props) {
     const [numberOfMembers, setNumberOfMembers] = React.useState<number>(0);
     const [addUserToGroupReqState, setAddUserToGroupReqState] = React.useState(RequestStateEnum.None);
     const [addUserToGroupErrMsg, setAddUserToGroupErrMsg] = React.useState('');
+    const navigate = useNavigate();
 
     const baseUrl = 'http://localhost:3002/message-board';
     const groupMembersCountQueryParams: { [key: string]: boolean } = {
@@ -137,6 +138,7 @@ function Group(props: Props) {
             })
             .then(async () => {
                 setAddUserToGroupReqState(RequestStateEnum.Success);
+                navigate(`/group/${props.groupid}`);
             })
             .catch((err) => {
                 setAddUserToGroupReqState(RequestStateEnum.Failure);
